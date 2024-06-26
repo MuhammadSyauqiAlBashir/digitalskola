@@ -1,113 +1,306 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import Swal from "sweetalert2";
+import { ArrowDownIcon } from "@heroicons/react/24/solid";
+import { IoCloudDownloadOutline, IoPersonCircle } from "react-icons/io5";
+import { ReactNode, useRef } from "react";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
+const responsive = {
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 2,
+  },
+  mobile: {
+    breakpoint: { max: 1024, min: 0 },
+    items: 1,
+  },
+};
+const responsive2 = {
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 1,
+  },
+  mobile: {
+    breakpoint: { max: 1024, min: 0 },
+    items: 1,
+  },
+};
+const CarouselItem = ({ children }) => {
+  return <div className="bg-white rounded-md h-80 xl:h-72">{children}</div>;
+};
+const CarouselItem2 = ({ children }) => {
+  return (
+    <div className="bg-white rounded-md w-full h-80 xl:h-72">{children}</div>
+  );
+};
+const CustomRightArrow = ({ onClick, ...rest }) => {
+  const {
+    onMove,
+    carouselState: { currentSlide, deviceType },
+  } = rest;
+  return <button onClick={() => onClick()} />;
+};
 
 export default function Home() {
+  const [guests, setGuests] = useState(null);
+  if (!guests) {
+    const getUser = async () => {
+      const { value: name } = await Swal.fire({
+        title: "Input your Name",
+        input: "text",
+        inputLabel: "Your Full Name",
+        inputPlaceholder: "Enter your name",
+      });
+      if (name) {
+        setGuests(name);
+        Swal.fire(`Welcome ${name}`);
+      }
+    };
+    getUser();
+  }
+  const testimoniRef = useRef(null);
+
+  const handleLihatTestimoniClick = () => {
+    if (!testimoniRef.current) return;
+    testimoniRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+    <main className="flex bg-[url('/bg.png')] bg-no-repeat bg-cover min-h-screen flex-col py-4 px-8 md:py-12 md:px-20 lg:py-12 lg:px-20 xl:py-20 xl:px-32 2xl:py-32 2xl:px-60">
+      <section className="grid grid-cols-1 lg:grid-cols-2">
+        <div className="py-8 px-4 gap-12">
+          <p>Hi {guests}, Selamat datang di</p>
+          <h1 className="text-6xl font-medium leading-tight py-6">
+            Digital Marketing Job Guarantee BootCamp
+          </h1>
+          <p>
+            Raih karir impian dengan pelatihan intensif dan eksklusif bersama
+            high-achievers dengan jaminan 100% uang kembali
+          </p>
+          <p className="mt-6">
+            100% Alumni Job Guarantee Program telah bekerja di :
+          </p>
+          <div className="flex flex-row items-center pt-6">
+            <img
+              className="w-1/2 object-contain h-20"
+              src="/bukalapak.svg"
+              alt="Bukalapak"
             />
+            <img
+              className="w-1/2 object-contain h-8"
+              src="/gojek.svg"
+              alt="Gojek"
+            />
+          </div>
+        </div>
+        <div className="py-8 px-4">
+          <img
+            src="https://pedagoo.com/wp-content/uploads/2020/06/2250x1500_czy-warto-korzystac-ze-szkolen-online-ollh.jpg"
+            alt="e-learning"
+          />
+        </div>
+      </section>
+      <div className="flex flex-col justify-center items-center py-20">
+        <button
+          onClick={handleLihatTestimoniClick}
+          className="bg-[#0097a3] text-white p-4 rounded-full flex-shrink-0"
+        >
+          <ArrowDownIcon className="size-6 text-white" />
+        </button>
+        <p className="text-[#0097a3] mt-6">Lihat Testimoni</p>
+      </div>
+      <section className="flex flex-col lg:flex-row">
+        <div
+          className="bg-testimoni-section rounded-3xl lg:w-8/12"
+          ref={testimoniRef}
+        >
+          <div className="flex flex-row justify-center items-center pt-10">
+            <IoCloudDownloadOutline className="flex border-white border-2 bg-white rounded-full text-3xl" />
+            <h2 className="text-white text-xl ml-6">Pengalaman Alumni</h2>
+          </div>
+          <div className="p-8 w-full">
+            <Carousel
+              responsive={responsive}
+              showDots={true}
+              removeArrowOnDeviceType={["mobile", "desktop"]}
+            >
+              <CarouselItem className="">
+                <div className="flex flex-row p-5">
+                  <IoPersonCircle className="text-6xl" />
+                  <div>
+                    <p className="font-bold">Agus Angga Dwi Wibowo</p>
+                    <p className="font-thin">Digital Campaign at SCB Digital</p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center flex-col">
+                  <div className="p-4 border-2 w-5/6 flex justify-center items-center flex-col">
+                    <p className="text-gray-500">Sebelum Bootcamp</p>
+                    <p>Digital Marketer intern at Katova Creative</p>
+                    <ArrowDownIcon className="size-6 text-[#0097a3]" />
+                    <p>Setelah dua bulan bekerja di -</p>
+                  </div>
+                </div>
+              </CarouselItem>
+              <CarouselItem className="">
+                <div className="flex flex-row p-5">
+                  <IoPersonCircle className="text-6xl" />
+                  <div>
+                    <p className="font-bold">Fa'iz Muhammad Azhar</p>
+                    <p className="font-thin">
+                      Market Place Operation - Evergreen
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center flex-col">
+                  <div className="p-4 border-2 w-5/6 flex justify-center items-center flex-col">
+                    <p className="text-gray-500">Sebelum Bootcamp</p>
+                    <p>Digital Marketer intern at Katova Creative</p>
+                    <ArrowDownIcon className="size-6 text-[#0097a3]" />
+                    <p>Setelah dua bulan bekerja di -</p>
+                  </div>
+                </div>
+              </CarouselItem>
+              <CarouselItem className="">
+                <div className="flex flex-row p-5">
+                  <IoPersonCircle className="text-6xl" />
+                  <div>
+                    <p className="font-bold">Agus Angga Dwi Wibowo</p>
+                    <p className="font-thin">Digital Campaign at SCB Digital</p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center flex-col">
+                  <div className="p-4 border-2 w-5/6 flex justify-center items-center flex-col">
+                    <p className="text-gray-500">Sebelum Bootcamp</p>
+                    <p>Digital Marketer intern at Katova Creative</p>
+                    <ArrowDownIcon className="size-6 text-[#0097a3]" />
+                    <p>Setelah dua bulan bekerja di -</p>
+                  </div>
+                </div>
+              </CarouselItem>
+              <CarouselItem className="">
+                <div className="flex flex-row p-5">
+                  <IoPersonCircle className="text-6xl" />
+                  <div>
+                    <p className="font-bold">Agus Angga Dwi Wibowo</p>
+                    <p className="font-thin">Digital Campaign at SCB Digital</p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center flex-col">
+                  <div className="p-4 border-2 w-5/6 flex justify-center items-center flex-col">
+                    <p className="text-gray-500">Sebelum Bootcamp</p>
+                    <p>Digital Marketer intern at Katova Creative</p>
+                    <ArrowDownIcon className="size-6 text-[#0097a3]" />
+                    <p>Setelah dua bulan bekerja di -</p>
+                  </div>
+                </div>
+              </CarouselItem>
+            </Carousel>
+          </div>
+          <div className="flex items-center justify-center py-9">
+            <div className="flex justify-center items-center border w-72 h-14 bg-[#0097a3]  rounded-lg">
+              <p className="text-white">Lihat Lebih Banyak Testimoni</p>
+            </div>
+          </div>
+          <div className="bg-black bg-opacity-15 p-7 order-last">
+            <p className="text-center text-2xl font-bold py-8">
+              Apa Kata Mereka
+            </p>
+            <div className="flex items-center justify-center">
+              <div className="border-4 w-full">
+                <Carousel
+                  responsive={responsive2}
+                  customRightArrow={<CustomRightArrow />}
+                  removeArrowOnDeviceType={["mobile", "desktop"]}
+                >
+                  <CarouselItem2>
+                    <div className="flex flex-row p-5">
+                      <IoPersonCircle className="text-6xl" />
+                      <div>
+                        <p className="font-bold">Agus Angga Dwi Wibowo</p>
+                        <p className="font-thin">
+                          Digital Campaign at SCB Digital
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-center flex-col">
+                      <div className="p-4 border-2 w-5/6 flex justify-center items-center flex-col">
+                        <p>bootcamp terkeren</p>
+                      </div>
+                    </div>
+                  </CarouselItem2>
+                  <CarouselItem2>
+                    <div className="flex flex-row p-5">
+                      <IoPersonCircle className="text-6xl" />
+                      <div>
+                        <p className="font-bold">Agus Angga Dwi Wibowo</p>
+                        <p className="font-thin">
+                          Digital Campaign at SCB Digital
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-center flex-col">
+                      <div className="p-4 border-2 w-5/6 flex justify-center items-center flex-col">
+                        <p>bootcamp terkeren</p>
+                      </div>
+                    </div>
+                  </CarouselItem2>
+                  <CarouselItem2>
+                    <div className="flex flex-row p-5">
+                      <IoPersonCircle className="text-6xl" />
+                      <div>
+                        <p className="font-bold">Agus Angga Dwi Wibowo</p>
+                        <p className="font-thin">
+                          Digital Campaign at SCB Digital
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-center flex-col">
+                      <div className="p-4 border-2 w-5/6 flex justify-center items-center flex-col">
+                        <p>bootcamp terkeren</p>
+                      </div>
+                    </div>
+                  </CarouselItem2>
+                </Carousel>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="h-full bg-white shadow-2xl ml-5 p-9 rounded-3xl space-y-6 lg:w-4/12 lg:sticky lg:top-0 lg:-mt-60">
+          <p className="">Detail</p>
+          <div className="flex items-center justify-center">
+            <img
+              src="/onlinebootcamp.png"
+              className="h-96 w-full"
+              alt="online bootcamp"
+            />
+          </div>
+          <p className="font-bold">Online BootCamp</p>
+          <p className="text-slate-700 line-through">RP.4.499.999</p>
+          <div className="flex flex-row">
+            <p className="bg-red-600 border-red-600 border-8">22%</p>
+            <p className="text-amber-400 p-2">Rp. 3.499.999</p>
+          </div>
+          <button className="text-center text-black border-4 rounded-xl border-yellow-400 bg-yellow-400 w-full h-10">
+            Daftar Sekarang
+          </button>
+          <br />
+          <button className="text-center text-white border-4 rounded-xl border-green-600 bg-green-600 w-full h-10">
+            Klaim Diskon Disini
+          </button>
+          <p className="w-full text-center">atau</p>
+          <a
+            href="#"
+            className="underline underline-offset-1 items-center justify-center flex"
+          >
+            Lihat Detail Program
           </a>
         </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      </section>
     </main>
   );
 }
