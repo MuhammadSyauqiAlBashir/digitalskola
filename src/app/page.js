@@ -71,7 +71,7 @@ export default function Home() {
     });
   };
   return (
-    <main className="flex bg-[url('/bg.png')] bg-no-repeat bg-cover min-h-screen flex-col py-4 px-8 md:py-12 md:px-20 lg:py-12 lg:px-20 xl:py-20 xl:px-32 2xl:py-32 2xl:px-60">
+    <main className="flex bg-no-repeat bg-cover min-h-screen flex-col py-4 px-8 md:py-12 md:px-20 lg:py-12 lg:px-20 xl:py-20 xl:px-32 2xl:py-32 2xl:px-60">
       <section className="grid grid-cols-1 lg:grid-cols-2">
         <div className="py-8 px-4 gap-12">
           <p>Hi {guests}, Selamat datang di</p>
@@ -150,7 +150,7 @@ export default function Home() {
                 <div className="flex flex-row p-5">
                   <IoPersonCircle className="text-6xl" />
                   <div>
-                    <p className="font-bold">Fa'iz Muhammad Azhar</p>
+                    <p className="font-bold">Faiz Muhammad Azhar</p>
                     <p className="font-thin">
                       Market Place Operation - Evergreen
                     </p>
